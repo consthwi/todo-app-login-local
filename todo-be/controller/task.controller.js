@@ -24,27 +24,46 @@ taskController.getTask = async (req, res) => {
   res.status(200).json({ status: "ok", data: taskList });
 };
 
-// Update Task
+// Update Task1
+// taskController.updateTask = async (req, res) => {
+//   try {
+//     const targetTask = await Task.findById(req.params.id);
+//     // res.status(200).send(task);
+//     // postman id-task 확인완료
+//     // res.status(200).send(Object.keys(req.body));
+//     // db에서 id로 선택한 데이터의 필드 값 전부 교체
+//     const field = Object.keys(req.body);
+//     field.map((value) => {
+//       return (targetTask[value] = req.body[value]);
+//     });
+//     const updateTask = targetTask;
+//     await updateTask.save();
+//     res.status(200).json({ status: "ok", data: updateTask });
+//     // db id해당데이터[task] = 요청한데이터[task]
+//     // db id해당데이터[isComplete] = 요청한데이터[isComplete]
+//   } catch (err) {
+//     res.status(400).json({ status: "fail", error: err });
+//   }
+//   // targetTask업데이트 확인 완료
+// };
+
+// Update Task2
 taskController.updateTask = async (req, res) => {
   try {
-    const targetTask = await Task.findById(req.params.id);
-    // res.status(200).send(task);
-    // postman id-task 확인완료
-    // res.status(200).send(Object.keys(req.body));
-    // db에서 id로 선택한 데이터의 필드 값 전부 교체
-    const field = Object.keys(req.body);
-    field.map((value) => {
-      return (targetTask[value] = req.body[value]);
-    });
-    const updateTask = targetTask;
-    await updateTask.save();
+    const updateTask = await Task.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true } // `new: true` return 새 문서
+    );
+    if (!updateTask) {
+      return res
+        .status(404)
+        .json({ status: "fail", message: "Task not found" });
+    }
     res.status(200).json({ status: "ok", data: updateTask });
-    // db id해당데이터[task] = 요청한데이터[task]
-    // db id해당데이터[isComplete] = 요청한데이터[isComplete]
   } catch (err) {
     res.status(400).json({ status: "fail", error: err });
   }
-  // targetTask업데이트 확인 완료
 };
 
 taskController.deleteTask = async (req, res) => {
