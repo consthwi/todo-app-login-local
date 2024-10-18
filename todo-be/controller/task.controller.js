@@ -47,7 +47,7 @@ taskController.getTask = async (req, res) => {
 //   // targetTask업데이트 확인 완료
 // };
 
-// Update Task2
+// Update Task
 taskController.updateTask = async (req, res) => {
   try {
     const updateTask = await Task.findByIdAndUpdate(
@@ -55,11 +55,6 @@ taskController.updateTask = async (req, res) => {
       req.body,
       { new: true } // `new: true` return 새 문서
     );
-    if (!updateTask) {
-      return res
-        .status(404)
-        .json({ status: "fail", message: "Task not found" });
-    }
     res.status(200).json({ status: "ok", data: updateTask });
   } catch (err) {
     res.status(400).json({ status: "fail", error: err });
