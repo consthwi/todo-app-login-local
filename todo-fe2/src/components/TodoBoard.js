@@ -16,7 +16,7 @@ const TodoBoardContainer = styled("div")(() => ({
 const TodoBoardWrapper = styled("div")(() => ({
   backgroundColor: "#fff",
   borderRadius: "1rem",
-  padding: "1.5rem 1rem 1.5rem 3rem",
+  padding: "1.5rem 1rem 1.5rem 2rem",
   boxShadow: "#00000033 3px 3px 3px",
 }));
 
@@ -51,7 +51,7 @@ const TodoBoard = ({ todoList, toggleComplete, deleteItem }) => {
           ? Array(todoList.length * 2)
               .fill(null)
               .map((_, idx) => <BoardSideImg key={idx} src={boardSideImg} />)
-          : Array(2)
+          : Array(5)
               .fill(null)
               .map((_, idx) => <BoardSideImg key={idx} src={boardSideImg} />)}
       </TodoBoardSide>

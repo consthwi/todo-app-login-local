@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 // style component
 const TodoContainer = styled(Container)(() => ({
   padding: "1rem",
+  maxWidth: "800px !important",
 }));
 
 const TodoTitle = styled("h1")(() => ({

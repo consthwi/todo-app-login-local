@@ -21,12 +21,9 @@ const ButtonDelete = styled(Button)(() => ({
   border: "none",
   boxShadow: "#e07368 1px 1px 3px",
   color: "salmon",
-  fontSize: "0.6rem",
-  padding: "0.4rem",
   "&:hover": { backgroundColor: "#e07368", color: "#fff" },
-  "@media(min-width: 900px)": {
-    fontSize: "0.8rem",
-    padding: "0.4rem 0.8rem",
+  "@media(max-width: 900px)": {
+    minWidth: "50px",
   },
 }));
 
@@ -34,12 +31,9 @@ const ButtonDone = styled(Button)(() => ({
   border: "none",
   boxShadow: "#87c5f9 1px 1px 3px",
   color: "#87c5f9",
-  fontSize: "0.6rem",
-  padding: "0.4rem",
   "&:hover": { backgroundColor: "#87c5f9", color: "#fff" },
-  "@media(min-width: 900px)": {
-    fontSize: "0.8rem",
-    padding: "0.4rem 0.8rem",
+  "@media(max-width: 900px)": {
+    minWidth: "50px",
   },
 }));
 
@@ -52,18 +46,21 @@ const ButtonUndone = styled(Button)(() => ({
   padding: "0.4rem",
   transition: "0.2s transform",
   "&:hover": { transform: "translateY(-3px)" },
-  "@media(min-width: 900px)": {
-    fontSize: "0.8rem",
-    padding: "0.4rem 0.8rem",
+  "@media(max-width: 900px)": {
+    minWidth: "50px",
   },
 }));
 
 const TodoTask = styled("p")(({ isComplete }) => ({
   fontFamily: "'Dongle', sans-serif",
-  fontSize: "1.5rem",
+  fontSize: "1.8rem",
   margin: "10px 0",
+  lineHeight: "1em",
   color: isComplete ? "#ddd" : "#555",
   textDecoration: isComplete ? "line-through" : "none",
+  "@media(max-width: 900px)": {
+    fontSize: "1.5rem",
+  },
 }));
 
 const TodoItem = ({ item, idx, deleteItem, toggleComplete }) => {
@@ -74,28 +71,22 @@ const TodoItem = ({ item, idx, deleteItem, toggleComplete }) => {
       </Grid2>
       <Grid2>
         <ButtonWrapper>
-          <ButtonDelete
-            onClick={() => deleteItem(item._id)}
-            variant="outlined"
-            startIcon={<DeleteIcon />}
-          >
-            Del
+          <ButtonDelete onClick={() => deleteItem(item._id)} variant="outlined">
+            <DeleteIcon />
           </ButtonDelete>
           {item.isComplete ? (
             <ButtonUndone
               onClick={() => toggleComplete(item._id)}
               variant="outlined"
-              startIcon={<UndoIcon />}
             >
-              Undo
+              <UndoIcon />
             </ButtonUndone>
           ) : (
             <ButtonDone
               onClick={() => toggleComplete(item._id)}
               variant="outlined"
-              startIcon={<CheckIcon />}
             >
-              Done
+              <CheckIcon />
             </ButtonDone>
           )}
         </ButtonWrapper>
