@@ -2,6 +2,7 @@ import React from "react";
 import TodoItem from "./TodoItem";
 import styled from "@emotion/styled";
 import boardSideImg from "../assets/board_side.png";
+import TodoLottie from "./TodoLottie";
 
 const TodoBoardContainer = styled("div")(() => ({
   backgroundColor: "#d6a96d",
@@ -55,7 +56,9 @@ const TodoBoard = ({ todoList, toggleComplete, deleteItem }) => {
               .map((_, idx) => <BoardSideImg key={idx} src={boardSideImg} />)}
       </TodoBoardSide>
       <TodoBoardWrapper>
-        <TodoBoardTitle>Todo List</TodoBoardTitle>
+        <TodoBoardTitle>
+          {todoList.length > 0 ? "Todo List" : "White Your Todo!"}
+        </TodoBoardTitle>
         {todoList.length > 0 ? (
           todoList.map((item, idx) => {
             return (
@@ -68,7 +71,7 @@ const TodoBoard = ({ todoList, toggleComplete, deleteItem }) => {
             );
           })
         ) : (
-          <h2>There is no Item to show</h2>
+          <TodoLottie sectionHeight={"150px"} />
         )}
       </TodoBoardWrapper>
     </TodoBoardContainer>

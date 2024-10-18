@@ -118,7 +118,7 @@ function App() {
               }
             }}
             value={todoValue}
-            placeholder="What are you going to do today?"
+            placeholder="오늘은 무엇을 할까요?"
             fullWidth
           />
         </Grid2>
