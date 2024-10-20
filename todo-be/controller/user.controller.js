@@ -7,6 +7,8 @@ const userController = {};
 userController.createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    // => post하는 데이터는 {name, email, password}이다.
+
     // 1. 유저확인 후
     const joinedUser = await User.findOne({ email: email });
     if (joinedUser) {
@@ -49,7 +51,7 @@ userController.loginWithEmail = async (req, res) => {
       // fe pw와 hash를 비교
     }
   } catch (err) {
-    res.status(400).json({ status: "fail", err });
+    res.status(400).json({ status: "fail", message: err.message });
   }
 };
 

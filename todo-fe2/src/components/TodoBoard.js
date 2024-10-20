@@ -39,7 +39,7 @@ const BoardSideImg = styled("img")(() => ({
 
 const TodoBoardTitle = styled("h2")(() => ({
   fontSize: "1.7rem",
-  color: "#salmon",
+  color: "salmon",
   margin: "10px 0",
 }));
 
