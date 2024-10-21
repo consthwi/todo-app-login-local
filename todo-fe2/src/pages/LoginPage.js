@@ -16,6 +16,9 @@ const LoginContainer = styled("div")(() => ({
   width: "600px",
   backgroundColor: "#ffffff88",
   boxShadow: "#00000033 0px 0px 10px",
+  "@media(max-width: 767px)": {
+    width: "80%",
+  },
 }));
 
 const LoginTitle = styled("h1")(() => ({
@@ -32,17 +35,44 @@ const LoginButton = styled(Button)(() => ({
   "&:hover": { backgroundColor: "salmon", color: "#fff" },
 }));
 
+const LoginInput = styled(Input)(() => ({
+  fontFamily: `"Dongle", sans-serif`,
+  fontSize: "1.7rem",
+  "&::after": {
+    borderBottom: "2px solid salmon",
+  },
+  "&::before": {
+    borderBottom: "1px solid #ddd",
+  },
+  "&:hover::before": {
+    borderBottom: "1px solid #e07368 !important",
+  },
+}));
+
+const LoginLabel = styled(InputLabel)(() => ({
+  fontFamily: `"Agdasima", sans-serif`,
+  fontSize: "1.3rem",
+  "&.Mui-focused": {
+    color: "salmon",
+  },
+}));
+
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [joinedUser, setJoinedUser] = useState(null);
+  const [focusedField, setFocusedField] = useState("");
+
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("/user/login", { email, password });
+      const res = await api.post("/user/login", {
+        email: email,
+        password: password,
+      });
       if (res.status === 200) {
         setJoinedUser(res.data.joinedUser);
         sessionStorage.setItem("token", res.data.token);
@@ -52,6 +82,7 @@ const LoginPage = () => {
       } else {
         throw new Error("아이디 또는 비밀번호가 일치하지 않습니다");
       }
+      navigate("/");
     } catch (err) {
       setError(err.message);
     }
@@ -61,44 +92,58 @@ const LoginPage = () => {
     <TodoContainer
       sx={{
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
       }}
     >
+      {error && <p>{error}</p>}
       <LoginContainer>
         <LoginTitle>Login</LoginTitle>
         <form onSubmit={handleLogin}>
-          <FormControl fullWidth sx={{ mb: "10px" }} error={!!error}>
-            <InputLabel htmlFor="login-email-input">Email Address</InputLabel>
-            <Input
+          <FormControl fullWidth sx={{ mb: "10px" }}>
+            <LoginLabel htmlFor="login-email-input">Email Address</LoginLabel>
+            <LoginInput
               id="login-email-input"
-              type="email"
-              value={email}
               onChange={(e) => setEmail(e.target.value)}
-              aria-describedby="email-helper-text"
+              onFocus={() => setFocusedField("email")}
+              onBlur={() => setFocusedField("")}
+              aria-describedby="login-email-helper-text"
+              required
             />
-            <FormHelperText id="email-helper-text">
-              Enter your registered email address.
+            <FormHelperText
+              id="login-email-helper-text"
+              sx={{
+                color: focusedField === "email" ? "salmon" : "#fff",
+              }}
+            >
+              Enter a valid email address
             </FormHelperText>
           </FormControl>
 
-          <FormControl fullWidth sx={{ mb: "10px" }} error={!!error}>
-            <InputLabel htmlFor="login-password-input">Password</InputLabel>
-            <Input
-              id="login-password-input"
+          <FormControl fullWidth sx={{ mb: "10px" }}>
+            <LoginLabel htmlFor="login-password-input">Password</LoginLabel>
+            <LoginInput
               type="password"
-              value={password}
+              id="login-password-input"
               onChange={(e) => setPassword(e.target.value)}
-              aria-describedby="password-helper-text"
+              onFocus={() => setFocusedField("password")}
+              onBlur={() => setFocusedField("")}
+              aria-describedby="login-password-helper-text"
+              required
             />
-            <FormHelperText id="password-helper-text">
-              Enter your password.
+            <FormHelperText
+              id="Login-password-helper-text"
+              sx={{
+                color: focusedField === "password" ? "salmon" : "#fff",
+              }}
+            >
+              Choose a secure password
             </FormHelperText>
           </FormControl>
 
-          <LoginButton type="submit">Enter</LoginButton>
-          {error && <div>{error}</div>}
+          <LoginButton type="submit">Join Account</LoginButton>
         </form>
       </LoginContainer>
     </TodoContainer>

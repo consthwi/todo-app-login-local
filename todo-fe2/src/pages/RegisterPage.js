@@ -6,7 +6,7 @@ import {
   InputLabel,
   styled,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TodoContainer from "../components/common/TodoContainer";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
@@ -16,6 +16,9 @@ const RegisterContainer = styled("div")(() => ({
   width: "600px",
   backgroundColor: "#ffffff88",
   boxShadow: "#00000033 0px 0px 10px",
+  "@media(max-width: 767px)": {
+    width: "80%",
+  },
 }));
 
 const RegisterTitle = styled("h1")(() => ({
@@ -32,12 +35,36 @@ const RegisterButton = styled(Button)(() => ({
   "&:hover": { backgroundColor: "salmon", color: "#fff" },
 }));
 
+const RegisterInput = styled(Input)(() => ({
+  fontFamily: `"Dongle", sans-serif`,
+  fontSize: "1.7rem",
+  "&::after": {
+    borderBottom: "2px solid salmon",
+  },
+  "&::before": {
+    borderBottom: "1px solid #ddd",
+  },
+  "&:hover::before": {
+    borderBottom: "1px solid #e07368 !important",
+  },
+}));
+
+const RegisterLabel = styled(InputLabel)(() => ({
+  fontFamily: `"Agdasima", sans-serif`,
+  fontSize: "1.3rem",
+  "&.Mui-focused": {
+    color: "salmon",
+  },
+}));
+
 const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [focusedField, setFocusedField] = useState("");
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -46,89 +73,128 @@ const RegisterPage = () => {
       if (password !== confirmPassword) {
         throw new Error("패스워드가 일치하지 않습니다");
       }
-      const res = await api.post("/user", { name, email, password });
+      const res = await api.post("/user", {
+        name: name,
+        email: email,
+        password: password,
+      });
       if (res.status === 200) {
         navigate("/login");
       } else {
-        alert(error);
+        throw new Error(res.data.error);
       }
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      setError(error.message);
     }
   };
+
+  useEffect(() => {
+    console.log("error state:", error);
+  }, [error]);
 
   return (
     <TodoContainer
       sx={{
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
       }}
     >
+      {error && <p>{error}</p>}
       <RegisterContainer>
         <RegisterTitle>Register</RegisterTitle>
         <form onSubmit={handleSubmit}>
           <FormControl fullWidth sx={{ mb: "10px" }}>
-            <InputLabel htmlFor="register-name-input">Name</InputLabel>
-            <Input
+            <RegisterLabel htmlFor="register-name-input">Name</RegisterLabel>
+            <RegisterInput
               id="register-name-input"
               onChange={(e) => setName(e.target.value)}
+              onFocus={() => setFocusedField("name")}
+              onBlur={() => setFocusedField("")}
               aria-describedby="register-name-helper-text"
               required
             />
-            <FormHelperText id="register-name-helper-text">
+            <FormHelperText
+              id="register-name-helper-text"
+              sx={{
+                color: focusedField === "name" ? "salmon" : "#fff",
+              }}
+            >
               Please enter your full name
             </FormHelperText>
           </FormControl>
 
           <FormControl fullWidth sx={{ mb: "10px" }}>
-            <InputLabel htmlFor="register-email-input">
+            <RegisterLabel htmlFor="register-email-input">
               Email Address
-            </InputLabel>
-            <Input
+            </RegisterLabel>
+            <RegisterInput
               id="register-email-input"
               onChange={(e) => setEmail(e.target.value)}
+              onFocus={() => setFocusedField("email")}
+              onBlur={() => setFocusedField("")}
               aria-describedby="register-email-helper-text"
               required
             />
-            <FormHelperText id="register-email-helper-text">
+            <FormHelperText
+              id="register-email-helper-text"
+              sx={{
+                color: focusedField === "email" ? "salmon" : "#fff",
+              }}
+            >
               Enter a valid email address
             </FormHelperText>
           </FormControl>
 
           <FormControl fullWidth sx={{ mb: "10px" }}>
-            <InputLabel htmlFor="register-password-input">Password</InputLabel>
-            <Input
+            <RegisterLabel htmlFor="register-password-input">
+              Password
+            </RegisterLabel>
+            <RegisterInput
               type="password"
               id="register-password-input"
               onChange={(e) => setPassword(e.target.value)}
+              onFocus={() => setFocusedField("password")}
+              onBlur={() => setFocusedField("")}
               aria-describedby="register-password-helper-text"
               required
             />
-            <FormHelperText id="register-password-helper-text">
+            <FormHelperText
+              id="register-password-helper-text"
+              sx={{
+                color: focusedField === "password" ? "salmon" : "#fff",
+              }}
+            >
               Choose a secure password
             </FormHelperText>
           </FormControl>
 
           <FormControl fullWidth sx={{ mb: "10px" }}>
-            <InputLabel htmlFor="register-confirm-password-input">
+            <RegisterLabel htmlFor="register-confirm-password-input">
               Confirm Password
-            </InputLabel>
-            <Input
+            </RegisterLabel>
+            <RegisterInput
               type="password"
               id="register-confirm-password-input"
               onChange={(e) => setConfirmPassword(e.target.value)}
+              onFocus={() => setFocusedField("confirmPassword")}
+              onBlur={() => setFocusedField("")}
               aria-describedby="register-confirm-password-helper-text"
               required
             />
-            <FormHelperText id="register-confirm-password-helper-text">
+            <FormHelperText
+              id="register-confirm-password-helper-text"
+              sx={{
+                color: focusedField === "confirmPassword" ? "salmon" : "#fff",
+              }}
+            >
               Re-enter your password
             </FormHelperText>
           </FormControl>
 
           <RegisterButton type="submit">Join Account</RegisterButton>
-          {error && <div>{error}</div>}
         </form>
       </RegisterContainer>
     </TodoContainer>

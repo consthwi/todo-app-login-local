@@ -5,14 +5,13 @@ const saltRounds = 10;
 const userController = {};
 
 userController.createUser = async (req, res) => {
+  const { name, email, password } = req.body;
+  // => post하는 데이터는 {name, email, password}이다.
   try {
-    const { name, email, password } = req.body;
-    // => post하는 데이터는 {name, email, password}이다.
-
     // 1. 유저확인 후
-    const joinedUser = await User.findOne({ email: email });
-    if (joinedUser) {
-      throw new Error("이미 가입이 완료된 유저입니다");
+    const user = await User.findOne({ email: email });
+    if (user) {
+      throw new Error("이미 가입이 완료된 이메일주소입니다");
     }
     // 2. 패스워드 암호화 (sync생성법이 더 명료)
     const salt = bcrypt.genSaltSync(saltRounds);
@@ -21,8 +20,9 @@ userController.createUser = async (req, res) => {
     const newUser = new User({ email: email, name: name, password: hash });
     await newUser.save();
     res.status(200).json({ status: "ok" });
-  } catch (err) {
-    res.status(400).json({ status: "fail", err });
+  } catch (error) {
+    // json내의 객체가 error객체 그 자체이다.
+    res.status(400).json({ status: "fail", message: error.message });
   }
 };
 

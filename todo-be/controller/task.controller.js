@@ -12,8 +12,8 @@ taskController.createTask = async (req, res) => {
     await newTask.save();
     // 데이터베이스 newTask 저장
     res.status(200).json({ status: "ok", data: newTask });
-  } catch (err) {
-    res.status(400).json({ status: "fail", error: err });
+  } catch (error) {
+    res.status(400).json({ status: "fail", message: error.message });
   }
 };
 
@@ -56,8 +56,8 @@ taskController.updateTask = async (req, res) => {
       { new: true } // `new: true` return 새 문서
     );
     res.status(200).json({ status: "ok", data: updateTask });
-  } catch (err) {
-    res.status(400).json({ status: "fail", error: err });
+  } catch (error) {
+    res.status(400).json({ status: "fail", message: error.message });
   }
 };
 
@@ -66,8 +66,8 @@ taskController.deleteTask = async (req, res) => {
   try {
     const targetTask = await Task.findByIdAndDelete(req.params.id);
     res.status(200).json({ status: "ok", data: targetTask });
-  } catch (err) {
-    res.status(400).json({ status: "fail", error: err });
+  } catch (error) {
+    res.status(400).json({ status: "fail", message: error.message });
   }
   // targetTask제거 확인 완료
 };

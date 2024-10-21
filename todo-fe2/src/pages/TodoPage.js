@@ -1,23 +1,57 @@
 import React, { useEffect, useState } from "react";
-import { Grid2 } from "@mui/material";
+import { Button, Grid2, TextField } from "@mui/material";
 import styled from "@emotion/styled";
 import api from "../utils/api";
 import TodoContainer from "../components/common/TodoContainer";
 import TodoBoard from "../components/TodoBoard";
-import TodoButton from "../components/common/TodoButton";
-import TodoInput from "../components/common/TodoInput";
+
+// style-component start
+const TodoTitle = styled("h1")(() => ({
+  fontSize: "2rem",
+  color: "salmon",
+  textAlign: "center",
+}));
+
+const TodoText = styled(Grid2)(() => ({}));
+
+const TodoInput = styled(TextField)(() => ({
+  color: "#8c7967",
+  transition: "0.3s all",
+  backgroundColor: "#ffffff11",
+  borderRadius: "5px",
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#cccccc",
+      zIndex: "-1",
+    },
+    "&:hover fieldset": {
+      borderColor: "#e07368",
+      background: "#ffffff88",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#e07368",
+      background: "#ffffff88",
+    },
+  },
+}));
+
+const TodoButton = styled(Button)(() => ({
+  width: "100%",
+  height: "100%",
+  fontSize: "1rem",
+  padding: "0.1rem",
+  border: "none",
+  boxShadow: "#e07368 1px 1px 3px",
+  color: "#fff",
+  backgroundColor: "#e07368",
+  "&:hover": { backgroundColor: "salmon", color: "#fff" },
+  "@media(max-width:900px)": { fontSize: "0.8rem" },
+}));
+// style-component end
 
 const TodoPage = () => {
   const [todoList, setTodoList] = useState([]);
   const [todoValue, setTodoValue] = useState("");
-
-  const TodoTitle = styled("h1")(() => ({
-    fontSize: "2rem",
-    color: "salmon",
-    textAlign: "center",
-  }));
-
-  const TodoText = styled(Grid2)(() => ({}));
 
   const getTasks = async () => {
     const res = await api.get("/tasks");
@@ -30,6 +64,7 @@ const TodoPage = () => {
       isComplete: false,
     });
     if (res.status === 200) {
+      console.log("todo추가 성공");
       setTodoValue("");
       getTasks();
     }
@@ -70,7 +105,9 @@ const TodoPage = () => {
       <TodoText container spacing={{ xs: 1, md: 2 }}>
         <Grid2 size={{ xs: 12, md: 10 }}>
           <TodoInput
-            onChange={(e) => setTodoValue(e.target.value)}
+            onChange={(e) => {
+              setTodoValue(e.target.value);
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 addTask();
