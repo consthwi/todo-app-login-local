@@ -9,7 +9,7 @@ import {
 import React, { useState } from "react";
 import TodoContainer from "../components/common/TodoContainer";
 import api from "../utils/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginContainer = styled("div")(() => ({
   padding: "2rem",
@@ -27,9 +27,8 @@ const LoginTitle = styled("h1")(() => ({
 }));
 
 const LoginButton = styled(Button)(() => ({
-  marginTop: "20px",
+  padding: "0.4rem 2rem",
   fontSize: "1rem",
-  width: "100%",
   color: "#fff",
   backgroundColor: "#e07368",
   "&:hover": { backgroundColor: "salmon", color: "#fff" },
@@ -54,6 +53,26 @@ const LoginLabel = styled(InputLabel)(() => ({
   fontSize: "1.3rem",
   "&.Mui-focused": {
     color: "salmon",
+  },
+}));
+
+const LoginButtonWrapper = styled("div")(() => ({
+  marginTop: "20px",
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "10px",
+  justifyContent: "space-between",
+}));
+
+const LoginJoinWrapper = styled("div")(() => ({
+  display: "flex",
+  alignItems: "center",
+  gap: "10px",
+  fontSize: "1.2rem",
+  color: "#ccc",
+  "& a": {
+    color: "salmon",
+    fontWeight: "bold",
   },
 }));
 
@@ -143,7 +162,13 @@ const LoginPage = () => {
             </FormHelperText>
           </FormControl>
 
-          <LoginButton type="submit">Join Account</LoginButton>
+          <LoginButtonWrapper>
+            <LoginButton type="submit">Enter</LoginButton>
+            <LoginJoinWrapper>
+              <span>If you don't have an account? </span>
+              <Link to="/register">Sign Up</Link>
+            </LoginJoinWrapper>
+          </LoginButtonWrapper>
         </form>
       </LoginContainer>
     </TodoContainer>
